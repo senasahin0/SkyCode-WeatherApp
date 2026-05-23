@@ -1,0 +1,160 @@
+/* SkyCode shared styles */
+
+.active-day {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: white;
+    transform: scale(1.08);
+    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
+}
+
+.nav-btn{
+    background: transparent;
+    border: none;
+    color:#94a3b8;
+    font-weight:600;
+    transition:.3s;
+    position:relative;
+    padding-bottom:6px;
+    cursor:pointer;
+    text-decoration:none;
+}
+.nav-btn:hover{
+    color:#3b82f6;
+}
+
+.active-nav{
+    color:#2563eb;
+    font-weight:700;
+}
+
+.active-nav::after{
+    content:'';
+    position:absolute;
+    left:0;
+    bottom:0;
+    width:100%;
+    height:2px;
+    border-radius:999px;
+    background:#2563eb;
+}
+
+.page-section{
+    display:none;
+}
+
+.active-section{
+    display:block;
+}
+
+.custom-slider{
+    -webkit-appearance:none;
+    appearance:none;
+    width:100%;
+    height:10px;
+    border-radius:999px;
+    background:linear-gradient(
+        90deg,
+        #60a5fa 0%,
+        #93c5fd 50%,
+        #fca5a5 100%
+    );
+    outline:none;
+}
+
+/* çizgi */
+
+.custom-slider::-webkit-slider-runnable-track{
+    height:10px;
+    border-radius:999px;
+}
+
+/* top */
+
+.custom-slider::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    appearance:none;
+
+    width:28px;
+    height:28px;
+
+    border-radius:50%;
+
+    background:white;
+
+    border:5px solid #2563eb;
+
+    box-shadow:
+    0 4px 15px rgba(37,99,235,0.25);
+
+    cursor:pointer;
+
+    margin-top:-9px;
+
+    transition:0.25s;
+}
+
+.custom-slider::-webkit-slider-thumb:hover{
+
+    transform:scale(1.12);
+
+    box-shadow:
+    0 6px 20px rgba(37,99,235,0.4);
+}
+
+.glass-card {
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .main-gradient {
+            background: radial-gradient(circle at 50% 0%, rgba(235, 245, 255, 1) 0%, rgba(255, 255, 255, 1) 100%);
+        }
+        .weather-text-glow {
+            filter: drop-shadow(0 0 35px rgba(33, 112, 228, 0.5));
+        }
+        .lift-hover {
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
+        }
+        .lift-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+        }
+        .premium-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 10px 20px -5px rgba(0, 0, 0, 0.02);
+        }
+        .premium-shadow-lg {
+            box-shadow: 0 30px 60px -15px rgba(33, 112, 228, 0.18), 0 15px 15px -10px rgba(0, 0, 0, 0.05);
+        }
+        .sky-card-gradient {
+            background: linear-gradient(135deg, #eef7ff 0%, #d8eaff 50%, #e8f3ff 100%);
+        }
+        .light-leak {
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 70%);
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.7;
+        }
+        .forecast-item-gradient {
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.7), rgba(240, 247, 255, 0.3));
+        }
+        .active-glow {
+            box-shadow: 0 0 25px rgba(33, 112, 228, 0.4);
+        }
+        .temp-glow-bg {
+            position: absolute;
+            top: 50%;
+            left: 20%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 70%);
+            filter: blur(40px);
+            z-index: 0;
+            pointer-events: none;
+        }

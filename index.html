@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SkyCode - Akıllı Hava Durumu</title>
+<script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="assets/js/tailwind.config.js"></script>
+<link rel="stylesheet" href="assets/css/styles.css"/>
+</head>
+<body class="main-gradient font-body-md text-on-surface selection:bg-primary-fixed min-h-screen">
+<script src="assets/js/navbar.js"></script>
+
+<!--TAHMİN SAYFASI -->
+
+<section id="forecast-section"
+class="page-section active-section">
+<main class="pt-40 pb-20 px-8 max-w-7xl mx-auto space-y-section-margin">
+<!-- Hero Search Section -->
+<header class="flex flex-col md:flex-row md:items-end justify-between gap-12 mb-20">
+<div class="space-y-4">
+<h1 id="hero-title"
+class="text-7xl font-black text-slate-900 leading-[0.95] tracking-tight">
+
+Merhaba Sena
+
+</h1>
+<p id="hero-subtitle"
+class="text-slate-500 text-2xl mt-6">
+
+Bugünkü Hava Durumunu Keşfet.
+
+</p>
+</div>
+<div class="flex items-center gap-3 bg-white/70 backdrop-blur-2xl p-3 rounded-[28px] border border-white/60 premium-shadow-lg w-full md:w-[520px] lift-hover">
+<div class="flex items-center gap-4 px-4 py-2 flex-grow">
+<span class="material-symbols-outlined text-blue-500/50 font-bold">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md font-semibold placeholder:text-outline/40 w-full outline-none" placeholder="Bir şehir arayın..." type="text"/>
+</div>
+<button onclick="getWeather()" class="bg-gradient-to-br from-primary to-blue-800 hover:shadow-blue-500/30 text-white px-8 py-4 rounded-2xl font-bold shadow-lg transition-all active:scale-95 whitespace-nowrap">
+                Hava Durumunu Getir
+            </button>
+</div>
+</header>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
+<!-- Main Weather Column -->
+<div class="lg:col-span-9 space-y-gutter">
+<!-- Main Temperature Card -->
+<section class="sky-card-gradient rounded-[48px] p-16 relative overflow-hidden premium-shadow-lg border border-white/90">
+<!-- Atmospheric effects -->
+<div class="light-leak"></div>
+<div class="temp-glow-bg"></div>
+<div class="absolute -bottom-16 -left-16 w-80 h-80 bg-white/30 rounded-full blur-[120px]"></div>
+<!-- Background texture city image -->
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover blur-[100px] opacity-[0.12] grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCL6hve1uU5dQ8JkO1AuQkt2stn25uCy8Htt9j_CfjW8eABd8pon4K5C6oi93o3TKU91OYUTa3dqwVoQab0hgEFi9ssbhs0I2XdPkoxp9DsK7JYk_g8513kucarZ7UgMi9Ro7TlBx6kxrhm0fu2rad5rn7eCmP8v0hkDn943Y-dBB8cSmldK0X7lMt4iuiQjyjwIxqmVKHNBuA6jXnZ5W8zXds0sPQCPUfrxhZ6NfIwr4738hgp6_pycX19Dc217qs6nabRdx4xmg"/>
+</div>
+<div id="selected-day"
+class="text-xl font-bold text-slate-500 tracking-wide mb-4">
+
+Bugün, 11 Mayıs
+
+</div>
+<div class="relative z-10 flex flex-col md:flex-row justify-between items-center md:items-end gap-16">
+<div class="space-y-12 w-full">
+<div class="flex items-center gap-8">
+<div class="w-12 h-12 rounded-2xl bg-white/50 backdrop-blur-md flex items-center justify-center border border-white/70 shadow-sm">
+<span class="material-symbols-outlined text-primary text-2xl">location_on</span>
+</div>
+<h2 id="city-name" class="font-headline-lg text-headline-lg text-on-background font-extrabold tracking-tight">Istanbul, TR</h2>
+</div>
+<div class="relative flex flex-col">
+<div class="flex items-start">
+<span id="temp-value" class="font-display text-[180px] md:text-[220px] text-primary weather-text-glow leading-[0.8] tracking-tighter drop-shadow-xl font-extrabold">24</span>
+<span class="font-display text-[60px] md:text-[80px] text-primary mt-6 ml-2 font-bold">°</span>
+</div>
+<p id="weather-desc" class="font-headline-md text-headline-md text-on-surface-variant font-extrabold tracking-widest uppercase opacity-90 mt-8 ml-4">Açık Hava</p>
+</div>
+</div>
+<div class="flex flex-col justify-end gap-5 w-full md:min-w-[280px]">
+<div class="grid grid-cols-1 gap-4">
+<div class="flex items-center justify-between p-6 rounded-[32px] bg-white/40 backdrop-blur-2xl border border-white/70 premium-shadow lift-hover cursor-default">
+    <div class="flex items-center gap-4">
+        <span class="material-symbols-outlined text-blue-500 font-bold">rainy</span>
+        <span class="font-bold text-on-surface-variant/80">Yağış</span>
+    </div>
+    <span id="rain-value" class="font-extrabold text-xl text-on-surface">0 mm</span>
+</div>
+<div class="flex items-center justify-between p-6 rounded-[32px] bg-white/40 backdrop-blur-2xl border border-white/70 premium-shadow lift-hover cursor-default">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-blue-500 font-bold">water_drop</span>
+<span class="font-bold text-on-surface-variant/80">Nem</span>
+</div>
+<span id="humidity-value" class="font-extrabold text-xl text-on-surface">42%</span>
+</div>
+<div class="flex items-center justify-between p-6 rounded-[32px] bg-white/40 backdrop-blur-2xl border border-white/70 premium-shadow lift-hover cursor-default">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-blue-500 font-bold">air</span>
+<span class="font-bold text-on-surface-variant/80">Rüzgar</span>
+</div>
+<span id="wind-value" class="font-extrabold text-xl text-on-surface">12 km/s</span>
+</div>
+<div class="flex items-center justify-between p-6 rounded-[32px] bg-white/40 backdrop-blur-2xl border border-white/70 premium-shadow lift-hover cursor-default">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-blue-500 font-bold">thermostat</span>
+<span class="font-bold text-on-surface-variant/80">Hissedilen</span>
+</div>
+<span  id="feels-value" class="font-extrabold text-xl text-on-surface">26°</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="mt-6 px-4">
+  <h3 class="font-bold text-lg mb-3 opacity-80">Saatlik Tahmin</h3>
+
+  <div id="hourly-container" class="flex gap-6 px-6 py-4 justify-center">
+</section>
+<!-- 7 Day Forecast Section -->
+<section class="space-y-8 pt-8">
+  <div class="flex items-center justify-between px-4">
+    <h3 class="font-headline-md text-headline-md text-on-surface font-bold tracking-tight opacity-80">
+      5 Günlük Tahmin
+    </h3>
+  </div>
+
+  <!-- 🔥 BURASI ÖNEMLİ -->
+<div id="forecast-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-5 px-4 items-stretch"></div>
+</section>
+</div>
+<!-- Right Panel: Recommendations -->
+<aside class="lg:col-span-3 space-y-gutter ">
+<section class="glass-card rounded-[48px] p-10 flex flex-col premium-shadow border-white/40 opacity-90">
+
+
+<div id="recommendation-list" class="space-y-6 flex-grow"></div>
+
+<!-- Promo Highlight Card -->
+<div class="bg-gradient-to-br from-blue-700 via-blue-800 to-indigo-900 rounded-[36px] text-white relative overflow-hidden shadow-2xl lift-hover w-full flex flex-col justify-between p-10">
+<div class="absolute -bottom-12 -right-12 w-48 h-48 bg-white/10 rounded-full blur-3xl"></div>
+<div class="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/noise-lines.png')] opacity-[0.05]"></div>
+<div class="relative z-10 space-y-6">
+<div class="w-14 h-14 bg-white/15 rounded-2xl flex items-center justify-center backdrop-blur-2xl border border-white/20 active-glow">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">mood</span>
+</div>
+<div class="space-y-3">
+<h4 class="font-headline-md text-headline-md leading-tight tracking-tight font-bold">Harika Bir Gün!</h4>
+<p class="text-white/70 font-medium leading-relaxed text-sm">Dışarı çıkmak ve temiz havanın tadını çıkarmak için en iyi zaman.</p>
+</div>
+</div>
+</div>
+<div class="mt-6">
+    
+    <button 
+        onclick="showPage('wear')"
+        class="w-full rounded-[28px] bg-white/60 border border-white/70 backdrop-blur-xl p-5 flex items-center justify-between hover:scale-[1.02] transition-all duration-300 premium-shadow">
+
+        <div class="flex items-center gap-4">
+
+            <div class="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined">
+                    checkroom
+                </span>
+            </div>
+
+            <div class="text-left">
+                <h4 class="font-bold text-on-surface">
+                    Ne Giymeliyim?
+                </h4>
+
+            </div>
+
+        </div>
+
+        <span class="material-symbols-outlined text-primary">
+            arrow_forward_ios
+        </span>
+
+    </button>
+
+</div>
+</div>
+
+</section>
+</aside>
+</div>
+</main>
+</section>
+
+<!--ANALİZ SAYFASI -->
+
+<section id="analysis-section" class="page-section">
+    <div class="max-w-[1400px] mx-auto px-8 pt-32 pb-16">
+<!-- Dashboard Header -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+<div>
+<h1 class="font-display text-headline-lg text-on-background mb-1">Hava Durumu Analizi</h1>
+<p class="text-on-surface-variant font-body-md opacity-60">Gelişmiş meteorolojik verilerin detaylı incelemesi.</p>
+</div>
+<!-- Time Filter Toggle -->
+<div class="glass-card bg-white/55 backdrop-blur-xl
+border border-white/80
+p-1.5 rounded-2xl flex items-center
+shadow-[0_10px_30px_rgba(15,23,42,0.06)]">
+
+<button class="px-6 py-2 rounded-xl text-sm font-bold
+bg-white text-primary shadow-sm">
+24 saat
+</button>
+
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-card-gap">
+<!-- Main Temperature Chart -->
+<div class="col-span-12 glass-card rounded-3xl p-gutter
+bg-white/55 backdrop-blur-xl
+border border-white/80
+shadow-[0_16px_50px_rgba(15,23,42,0.08)]">
+<div class="flex justify-between items-center mb-10">
+<div>
+<h3 class="text-sm font-bold text-outline uppercase tracking-wider mb-1">Sıcaklık Trendi</h3>
+<span class="text-blue-500 pt-2 AB6AXuAwIYWtozEM8HNnCLcq3-NUoGk061P_jC5fVp19cAZQD9eIWkaZ3UGew3TBsgzuZZsZRmdrtuz0iO0FA3G78kRQ-HvVqsFmu4CSMwMNYFShHNtjzN0QUWyfcF0M2ZI0xjCG56V8t7hUhrd_rydHprkVqAkWG6NsNKB6m9Uk3nFk12oiyET8es1eolaDm_PW3gOaDEqq6JuBbj9eYWBNFlqEAqq5_EueVU30X7vIFMEvv4CL1aWwDEmBtyYqPeKTwn0dNkzNyFh4IA">Son 24 Saatlik Değişim</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary shadow-[0_0_8px_rgba(0,88,190,0.4)]"></span>
+<span class="text-xs font-bold text-on-surface/80">Hissedilen</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary-container"></span>
+<span class="text-xs font-bold text-on-surface/80">Gerçek</span>
+</div>
+</div>
+</div>
+<!-- Chart Visualization -->
+<div class="relative h-[340px] w-full mt-4 flex items-end">
+<div class="w-full h-[420px] relative pt-10">
+    <canvas id="tempChart"
+            class="w-full h-full">
+    </canvas>
+</div>
+<!-- Y-Axis Labels -->
+</div>
+</div>
+<!-- Humidity Card -->
+<div class="col-span-12 lg:col-span-6 glass-card rounded-3xl p-gutter
+bg-white/55 backdrop-blur-xl
+border border-white/80
+shadow-[0_14px_45px_rgba(15,23,42,0.07)]">
+<div class="flex justify-between items-start mb-8">
+<div>
+<h3 class="text-sm font-bold text-outline uppercase tracking-wider mb-1">Nem Oranı</h3>
+<p class="text-xs text-outline/70">Zirve nem seviyesi: %72</p>
+</div>
+<div class="bg-primary/10 p-3 rounded-2xl text-primary">
+<span class="material-symbols-outlined">humidity_percentage</span>
+</div>
+</div>
+<div class="flex items-end mb-10">
+<div id="humidityValue" class="text-[56px] font-extrabold text-on-background leading-none tracking-tighter mr-8">64<span class="text-2xl font-bold ml-1">%</span></div>
+<div class="mb-2">
+<span class="block text-label-caps text-primary font-extrabold mb-0.5">İDEAL</span>
+<span class="text-xs text-outline font-medium">İç mekan konforu</span>
+</div>
+</div>
+<div class="h-28 w-full relative">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 500 100">
+<path d="M0,100 L0,60 Q125,30 250,70 T500,50 L500,100 Z" fill="rgba(0, 88, 190, 0.08)"></path>
+<path d="M0,60 Q125,30 250,70 T500,50" fill="none" stroke="#0058be" stroke-linecap="round" stroke-width="3"></path>
+</svg>
+</div>
+</div>
+<!-- Wind Speed Card -->
+<div class="col-span-12 lg:col-span-6 glass-card rounded-3xl p-gutter
+bg-white/55 backdrop-blur-xl
+border border-white/80
+shadow-[0_14px_45px_rgba(15,23,42,0.07)]">
+<div class="flex justify-between items-start mb-8">
+<div>
+<h3 class="text-sm font-bold text-outline uppercase tracking-wider mb-1">Rüzgar Hızı</h3>
+<p class="text-xs text-outline/70">Yön: Kuzeydoğu (Orta)</p>
+</div>
+<div class="bg-tertiary-container/10 p-3 rounded-2xl text-tertiary">
+<span class="material-symbols-outlined">air</span>
+</div>
+</div>
+<div class="flex items-end mb-6">
+<div id="windValue" class="text-[56px] font-extrabold text-on-background leading-none tracking-tighter mr-8">18<span class="text-2xl font-bold ml-1">km/h</span></div>
+<div class="mb-2">
+<span class="block text-label-caps text-tertiary font-extrabold mb-0.5">KUZEYDOĞU</span>
+<span class="text-xs text-outline font-medium">Hafif esintili</span>
+</div>
+</div>
+<div class="flex justify-center pt-2">
+<div class="relative w-32 h-32 rounded-full border-2 border-surface-container-highest flex items-center justify-center">
+<div class="absolute inset-0 border-[10px] border-transparent border-t-primary rounded-full rotate-[45deg] opacity-10"></div>
+<div class="w-1.5 h-14 bg-primary rounded-full absolute origin-bottom bottom-1/2 rotate-[45deg] shadow-[0_0_15px_rgba(0,88,190,0.3)]"></div>
+<div class="w-5 h-5 rounded-full bg-primary border-4 border-white shadow-md z-10"></div>
+<span class="absolute top-1 text-[10px] font-black text-outline/50">K</span>
+<span class="absolute right-1 text-[10px] font-black text-outline/50">D</span>
+<span class="absolute bottom-1 text-[10px] font-black text-outline/50">G</span>
+<span class="absolute left-1 text-[10px] font-black text-outline/50">B</span>
+</div>
+</div>
+</div>
+<!-- Secondary Metrics Row -->
+<div class="col-span-12 md:col-span-4 glass-card rounded-2xl p-7
+bg-white/60 backdrop-blur-xl
+border border-white/80
+shadow-[0_12px_35px_rgba(15,23,42,0.06)]
+hover:-translate-y-1
+hover:shadow-xl
+transition-all duration-300">
+<div class="flex items-center justify-between mb-6">
+<span class="text-xs font-bold text-outline uppercase tracking-widest">UV İndeksi</span>
+<span class="material-symbols-outlined text-primary text-xl">wb_sunny</span>
+</div>
+<div id="uvValue" class="text-3xl font-extrabold text-on-background mb-5">4 <span class="text-sm font-bold text-outline/50">/ 11</span></div>
+<div class="h-2.5 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-[36%] shadow-[0_0_10px_rgba(0,88,190,0.2)]"></div>
+</div>
+<p class="text-xs text-outline/70 mt-4 leading-relaxed font-medium">Orta derece risk, güneş koruması önerilir.</p>
+</div>
+<div class="col-span-12 md:col-span-4 glass-card rounded-2xl p-7
+bg-white/60 backdrop-blur-xl
+border border-white/80
+shadow-[0_12px_35px_rgba(15,23,42,0.06)]
+hover:-translate-y-1
+hover:shadow-xl
+transition-all duration-300">
+<div class="flex items-center justify-between mb-6">
+<span class="text-xs font-bold text-outline uppercase tracking-widest">Hava Kalitesi</span>
+<span class="material-symbols-outlined text-primary text-xl">eco</span>
+</div>
+<div id="aqiValue" class="text-3xl font-extrabold text-on-background mb-5">42 <span class="text-sm font-bold text-outline/50">AQI</span></div>
+<div class="h-2.5 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-emerald-500 rounded-full w-[42%] shadow-[0_0_10px_rgba(16,185,129,0.2)]"></div>
+</div>
+<p class="text-xs text-outline/70 mt-4 leading-relaxed font-medium">Mükemmel hava kalitesi, dış mekan için ideal.</p>
+</div>
+<div class="col-span-12 md:col-span-4 glass-card rounded-2xl p-7
+bg-white/60 backdrop-blur-xl
+border border-white/80
+shadow-[0_12px_35px_rgba(15,23,42,0.06)]
+hover:-translate-y-1
+hover:shadow-xl
+transition-all duration-300">
+<div class="flex items-center justify-between mb-6">
+<span class="text-xs font-bold text-outline uppercase tracking-widest">Yağış İhtimali</span>
+<span class="material-symbols-outlined text-primary text-xl">umbrella</span>
+</div>
+<div id="rainValue" class="text-3xl font-extrabold text-on-background mb-5">12 <span class="text-sm font-bold text-outline/50">%</span></div>
+<div class="h-2.5 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-blue-400 rounded-full w-[12%] shadow-[0_0_10px_rgba(96,165,250,0.2)]"></div>
+</div>
+<p class="text-xs text-outline/70 mt-4 leading-relaxed font-medium">Önümüzdeki saatlerde yağış beklenmiyor.</p>
+</div>
+</div>
+</section>
+
+<!-- KAYIT OL SAYFASI -->
+<section id="signup-section"
+class="page-section min-h-screen">
+
+<div class="min-h-screen flex items-center justify-center px-6 pt-40 pb-20">
+
+<div class="w-full max-w-3xl bg-white/70 backdrop-blur-xl
+rounded-[40px] p-12 shadow-[0_20px_80px_-20px_rgba(37,99,235,0.25)]
+border border-white/60">
+
+<!-- Başlık -->
+<div class="text-center mb-12">
+
+<h1 class="text-5xl font-black text-slate-800 mb-4">
+SkyCode’a Hoş Geldin ☁️
+</h1>
+
+<p class="text-slate-500 text-lg">
+Sana özel hava deneyimi hazırlayalım.
+</p>
+
+</div>
+
+<!-- FORM -->
+<div class="space-y-8">
+
+<!-- isim -->
+<div>
+
+<label class="block text-sm font-bold text-slate-700 mb-3">
+Ad Soyad
+</label>
+
+<input id="signup-name"
+type="text"
+placeholder="Adınızı girin"
+class="w-full h-14 rounded-2xl px-5
+bg-white border border-slate-200
+outline-none focus:border-blue-500
+text-slate-700"
+/>
+
+</div>
+
+<!-- email -->
+<div>
+
+<label class="block text-sm font-bold text-slate-700 mb-3">
+E-posta
+</label>
+
+<input id="signup-email"
+type="email"
+placeholder="ornek@mail.com"
+class="w-full h-14 rounded-2xl px-5
+bg-white border border-slate-200
+outline-none focus:border-blue-500
+text-slate-700"
+/>
+
+</div>
+
+<!-- stil -->
+<div>
+
+<label class="block text-sm font-bold text-slate-700 mb-4">
+Giyim tarzın nasıl?
+</label>
+
+<div class="flex flex-wrap gap-3">
+
+<button
+data-style="Spor"
+class="style-btn px-5 py-3 rounded-2xl bg-slate-100 text-slate-600 font-bold">
+Spor
+</button>
+
+<button
+data-style="Casual"
+class="style-btn px-5 py-3 rounded-2xl bg-slate-100 text-slate-600 font-bold">
+Casual
+</button>
+
+<button
+data-style="Minimal"
+class="style-btn px-5 py-3 rounded-2xl bg-slate-100 text-slate-600 font-bold">
+Minimal
+</button>
+
+<button
+data-style="Şık"
+class="style-btn px-5 py-3 rounded-2xl bg-slate-100 text-slate-600 font-bold">
+Şık
+</button>
+
+</div>
+
+</div>
+
+<!-- üşüme -->
+<div>
+
+<label class="block text-sm font-bold text-slate-700 mb-4">
+Soğuğa karşı nasılsın?
+</label>
+
+<div class="relative pt-3">
+
+<input
+type="range"
+min="1"
+max="10"
+value="5"
+class="custom-slider w-full"/>
+
+<div class="flex justify-between text-xs text-slate-400 mt-4 font-medium">
+
+<span>🥶 Çok Üşürüm</span>
+
+<span>😌 Normal</span>
+
+<span>🥵 Kolay Terlerim</span>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- GÜNLÜK RUTİN -->
+<div>
+
+<label class="block text-sm font-bold text-slate-700 mb-4">
+Günün genelde nasıl geçiyor?
+</label>
+
+<div class="grid grid-cols-2 gap-3">
+
+<button
+data-routine="Ofis"
+class="routine-btn p-4 rounded-2xl bg-slate-100 font-semibold">
+
+💼 Ofis
+
+</button>
+
+<button
+data-routine="Üniversite"
+class="routine-btn p-4 rounded-2xl bg-slate-100 font-semibold">
+
+🎓 Üniversite
+
+</button>
+
+<button
+data-routine="Dışarıda Aktif"
+class="routine-btn p-4 rounded-2xl bg-slate-100 font-semibold">
+
+🚶 Dışarıda Aktif
+
+</button>
+
+<button data-routine="Ev / Remote"
+class="routine-btn p-4 rounded-2xl bg-slate-100 font-semibold">
+
+🏠 Ev / Remote
+
+</button>
+
+</div>
+
+</div>
+
+<!-- aktiviteler -->
+<div>
+
+<label class="block text-sm font-bold text-slate-700 mb-4">
+En sık yaptığın aktiviteler
+</label>
+
+<div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+
+<button
+type="button"
+data-activity="Koşu"
+class="activity-btn p-4 rounded-2xl bg-slate-100 text-center font-semibold transition-all duration-300 hover:scale-105 hover:bg-blue-100">
+🏃 Koşu
+</button>
+
+<button
+type="button"
+data-activity="Fitness"
+class="activity-btn p-4 rounded-2xl bg-slate-100 text-center font-semibold transition-all duration-300 hover:scale-105 hover:bg-blue-100">
+💪 Fitness
+</button>
+
+<button
+type="button"
+data-activity="Kahve"
+class="activity-btn p-4 rounded-2xl bg-slate-100 text-center font-semibold transition-all duration-300 hover:scale-105 hover:bg-blue-100">
+☕ Kahve
+</button>
+
+<button
+type="button"
+data-activity="Fotoğraf"
+class="activity-btn p-4 rounded-2xl bg-slate-100 text-center font-semibold transition-all duration-300 hover:scale-105 hover:bg-blue-100">
+📷 Fotoğraf
+</button>
+
+<button
+type="button"
+data-activity="Bisiklet"
+class="activity-btn p-4 rounded-2xl bg-slate-100 text-center font-semibold transition-all duration-300 hover:scale-105 hover:bg-blue-100">
+🚴 Bisiklet
+</button>
+
+<button
+type="button"
+data-activity="Seyahat"
+class="activity-btn p-4 rounded-2xl bg-slate-100 text-center font-semibold transition-all duration-300 hover:scale-105 hover:bg-blue-100">
+✈️ Seyahat
+</button>
+
+</div>
+
+</div>
+
+<!-- button -->
+<button id="create-account-btn"
+class="w-full h-16 rounded-2xl
+bg-blue-600 hover:bg-blue-700
+text-white text-lg font-black
+transition-all duration-300
+hover:scale-[1.02]
+shadow-[0_10px_30px_-10px_rgba(37,99,235,0.5)]">
+
+HESABI OLUŞTUR
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- KULLANICI SAYFASI -->
+<section id="profile-section"
+class="page-section min-h-screen">
+
+<div class="w-full min-h-screen bg-[#eef3fb] pt-28 pb-20 px-8">
+
+<div class="max-w-7xl mx-auto">
+
+<!-- Başlık -->
+<div class="mb-12">
+<h1 class="text-4xl font-black text-slate-800 mb-3">
+SkyCode Profilin
+</h1>
+
+<p class="text-slate-500 text-lg">
+Profilinizi yönetin ve uygulama deneyiminizi kişiselleştirin.
+</p>
+</div>
+
+<!-- GRID -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+<!-- SOL TARAF -->
+<div class="lg:col-span-5 space-y-8">
+
+<!-- PROFİL -->
+<section class="bg-white/70 backdrop-blur-xl border border-white/60 shadow-xl rounded-3xl p-8">
+
+<h2 class="text-sm font-bold tracking-widest text-blue-600 mb-6">
+PROFİL
+</h2>
+
+<div class="flex items-center gap-6">
+
+<div class="relative">
+
+<div class="w-24 h-24 rounded-full bg-blue-100
+flex items-center justify-center
+border-4 border-white shadow-lg">
+
+<span class="material-symbols-outlined
+text-blue-600 text-[42px]">
+
+person
+
+</span>
+
+</div>
+
+</div>
+
+<div>
+
+<h3 id="profile-name" class="text-2xl font-black text-slate-800">
+Caner Demir
+</h3>
+
+<p id="profile-email" class="text-slate-500">
+caner@example.com
+</p>
+
+<div class="flex gap-3 mt-5">
+
+<button
+class="px-6 py-3 bg-blue-600 text-white rounded-2xl font-bold hover:scale-105 transition-all duration-300 shadow-lg">
+
+PROFİLİ DÜZENLE
+
+</button>
+
+<button
+onclick="logoutUser()"
+class="px-6 py-3 bg-red-500 text-white rounded-2xl font-bold hover:scale-105 transition-all duration-300 shadow-lg">
+
+ÇIKIŞ
+
+</button>
+
+</div>
+
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- FAVORİ ŞEHİRLER -->
+<section class="bg-white/70 backdrop-blur-xl border border-white/60 shadow-xl rounded-3xl p-8">
+
+<div class="flex justify-between items-center mb-6">
+
+<h2 class="text-sm font-bold tracking-widest text-blue-600">
+FAVORİ ŞEHİRLER
+</h2>
+
+<button
+onclick="addFavoriteCity()"
+class="text-blue-600 font-bold hover:opacity-70">
++ EKLE
+</button>
+
+</div>
+
+<div id="favorite-cities"
+class="space-y-4">
+
+</div>
+
+
+</section>
+<!-- TEMA -->
+<section class="bg-white/70 backdrop-blur-xl border border-white/60 shadow-xl rounded-3xl p-8">
+
+<div class="flex items-center justify-between">
+
+<div>
+
+<h2 class="text-sm font-bold tracking-widest text-blue-600 mb-3">
+TEMA
+</h2>
+
+<p class="text-slate-500">
+Uygulama görünümünü özelleştir.
+</p>
+
+</div>
+
+<div class="flex p-1 bg-slate-100 rounded-2xl gap-1">
+
+<button class="px-5 py-3 rounded-xl bg-white shadow font-bold text-blue-600 flex items-center gap-2">
+
+<span class="material-symbols-outlined text-sm">
+light_mode
+</span>
+
+Açık
+
+</button>
+
+<button class="px-5 py-3 rounded-xl text-slate-500 flex items-center gap-2">
+
+<span class="material-symbols-outlined text-sm">
+dark_mode
+</span>
+
+Koyu
+
+</button>
+
+</div>
+
+</div>
+
+</section>
+</div>
+
+<!-- SAĞ TARAF -->
+<!-- SAĞ TARAF -->
+<div class="lg:col-span-7 space-y-8">
+
+<!-- HAVA PROFİLİ -->
+<section class="bg-white/70 backdrop-blur-xl border border-white/60 shadow-xl rounded-3xl p-8">
+
+<h2 class="text-sm font-bold tracking-widest text-blue-600 mb-8">
+HAVA PROFİLİN
+</h2>
+
+<div class="grid grid-cols-2 gap-6">
+
+<div class="bg-white rounded-2xl p-5 shadow-sm">
+<p class="text-xs font-bold tracking-widest text-slate-400 mb-2">
+GİYİM TARZI
+</p>
+
+<h3 id="profile-style"
+class="text-xl font-black text-slate-800">
+Minimal
+</h3>
+</div>
+
+<div class="bg-white rounded-2xl p-5 shadow-sm">
+<p class="text-xs font-bold tracking-widest text-slate-400 mb-2">
+SOĞUK HASSASİYETİ
+</p>
+
+<h3 id="profile-cold"
+class="text-xl font-black text-slate-800">
+Kolay Üşür
+</h3>
+</div>
+
+<div class="bg-white rounded-2xl p-5 shadow-sm">
+<p class="text-xs font-bold tracking-widest text-slate-400 mb-2">
+GÜNLÜK RUTİN
+</p>
+
+<h3 id="profile-routine"
+class="text-xl font-black text-slate-800">
+Yoğun Günler
+</h3>
+</div>
+
+<div class="bg-white rounded-2xl p-5 shadow-sm">
+<p class="text-xs font-bold tracking-widest text-slate-400 mb-2">
+AKTİVİTELER
+</p>
+
+<h3 id="profile-activities"
+class="text-lg font-black text-slate-800 leading-relaxed">
+Fitness • Kahve • Seyahat
+</h3>
+</div>
+
+</div>
+
+</section>
+
+<!-- AI ANALİZ -->
+<section class="bg-gradient-to-br from-blue-600 to-indigo-600
+text-white rounded-3xl p-8 shadow-2xl relative overflow-hidden">
+
+<div class="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
+
+<div class="relative z-10">
+
+<div class="flex items-center gap-3 mb-6">
+
+<div class="w-14 h-14 rounded-2xl bg-white/20
+flex items-center justify-center backdrop-blur-lg">
+
+<span class="material-symbols-outlined text-3xl">
+auto_awesome
+</span>
+
+</div>
+
+<div>
+
+<h2 class="text-2xl font-black">
+SkyCode Seni Tanıyor
+</h2>
+
+<p class="text-blue-100">
+AI destekli kişisel hava analizi
+</p>
+
+</div>
+
+</div>
+
+<div class="space-y-4 text-blue-50 leading-relaxed">
+
+<div  id="ai-line-1" class="bg-white/10 rounded-2xl p-4 backdrop-blur-lg">
+🌤️ Serin havalarda kalın kombinleri tercih ediyorsun.
+</div>
+
+<div id="ai-line-2" class="bg-white/10 rounded-2xl p-4 backdrop-blur-lg">
+☕ Gün içinde kafe ve sosyal alanlarda zaman geçiriyorsun.
+</div>
+
+<div id="ai-line-3" class="bg-white/10 rounded-2xl p-4 backdrop-blur-lg">
+👟 Rahat ve minimal kombin önerileri sana daha uygun.
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+</div>
+
+</section>
+
+<!--NE GİYMELİYİM SAYFASI -->
+
+<section id="outfit-section" class="page-section">
+    <main class="pt-32 pb-20 px-6 max-w-7xl mx-auto">
+<!-- Header -->
+<header class="mb-12">
+<h1 class="font-display text-display text-on-surface mb-2">Ne Giymeliyim?</h1>
+<p class="text-body-lg text-on-surface-variant">Kişisel asistanınız bugünkü hava durumuna göre gardırobunuzu hazırladı.</p>
+</header>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+<!-- Current Weather Summary -->
+<section class="md:col-span-4 h-full">
+<div class="sky-card-gradient rounded-[48px] p-12 relative overflow-hidden premium-shadow-lg border border-white/90 flex flex-col justify-center items-center text-center min-h-[480px]">
+<div>
+<div class="flex flex-col items-center text-center mb-10">
+<div>
+<h2 id="wear-city"
+class="text-[42px] font-black tracking-tight text-on-surface">
+İstanbul
+</h2>
+<p id="wear-date" class="text-on-surface-variant font-semibold text-lg opacity-70">Bugün, 24 Mayıs</p>
+</div>
+</div>
+<div class="mb-8 flex flex-col items-center">
+<span id="wear-temp"
+class="text-[120px] leading-none font-black tracking-[-0.06em] text-primary drop-shadow-[0_12px_32px_rgba(37,99,235,0.28)]">
+24°C
+</span>
+<p id="wear-desc"
+class="uppercase tracking-[0.18em] font-black text-[22px] text-on-surface-variant mt-4 opacity-70 text-center">
+Açık Hava
+</p>
+</div>
+<span 
+    id="wear-icon"
+    class="material-symbols-outlined text-[72px] text-primary mt-6 drop-shadow-[0_8px_24px_rgba(37,99,235,0.25)]">
+    wb_sunny
+</span>
+</div>
+</div>
+</section>
+<!-- Günün Önerileri -->
+<section class="md:col-span-8">
+<div class="mb-6 flex items-center justify-between">
+<h3 class="font-headline-md text-headline-md">Günün Önerileri</h3>
+<span class="px-4 py-1 rounded-full bg-primary/10 text-primary text-label-caps">AKILLI TAVSİYE</span>
+</div>
+<div class="grid grid-cols-1 gap-6">
+<!-- Morning -->
+<div class="glass-card rounded-[32px] p-7 flex items-center gap-6
+bg-white/45 backdrop-blur-xl
+border border-white/70
+shadow-[0_8px_32px_rgba(15,23,42,0.06)]
+hover:shadow-[0_16px_40px_rgba(37,99,235,0.12)]
+hover:bg-white/65
+hover:scale-[1.01] hover:translate-y-[-4px] hover:shadow-xl transition-all duration-300 cursor-pointer">
+<div class="w-20 h-20 rounded-xl bg-surface-container-high flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-4xl" data-icon="wb_twilight">wb_twilight</span>
+</div>
+<div class="flex-grow pl-2">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-headline-md text-lg text-on-surface mb-2">Sabah (08:00 - 12:00)</h4>
+<span id="morning-degree" class="text-sm font-semibold text-primary">
+18°C
+</span>
+</div>
+<p id="morning-text"
+class="text-body-md text-on-surface-variant leading-relaxed mt-1"><strong class="text-on-surface">Hafif ceket:</strong> Sabah serinliği için ince bir katman ideal olacaktır.</p>
+</div>
+</div>
+<!-- Afternoon -->
+<div class="glass-card rounded-[32px] p-7 flex items-center gap-6
+bg-white/45 backdrop-blur-xl
+border border-white/70
+shadow-[0_8px_32px_rgba(15,23,42,0.06)]
+hover:shadow-[0_16px_40px_rgba(37,99,235,0.12)]
+hover:bg-white/65
+hover:scale-[1.01] hover:translate-y-[-4px] hover:shadow-xl transition-all duration-300 cursor-pointer">
+<div class="w-20 h-20 rounded-xl bg-primary flex items-center justify-center text-white shrink-0">
+<span class="material-symbols-outlined text-4xl" data-icon="light_mode">light_mode</span>
+</div>
+<div class="flex-grow pl-2">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-headline-md text-lg text-on-surface mb-2">Öğle (12:00 - 17:00)</h4>
+<span id="noon-degree" class="text-sm font-semibold text-primary">
+24°C
+</span>
+</div>
+<p id="noon-text"
+class="text-body-md text-on-surface-variant leading-relaxed mt-1"><strong class="text-on-surface">T-shirt:</strong> En sıcak saatlerde pamuklu, nefes alan bir üst tercih edin.</p>
+</div>
+</div>
+<!-- Evening -->
+<div class="glass-card rounded-[32px] p-7 flex items-center gap-6
+bg-white/45 backdrop-blur-xl
+border border-white/70
+shadow-[0_8px_32px_rgba(15,23,42,0.06)]
+hover:shadow-[0_16px_40px_rgba(37,99,235,0.12)]
+hover:bg-white/65
+hover:scale-[1.01] hover:translate-y-[-4px] hover:shadow-xl transition-all duration-300 cursor-pointer">
+<div class="w-20 h-20 rounded-xl bg-surface-container-high flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-4xl" data-icon="nights_stay">nights_stay</span>
+</div>
+<div class="flex-grow pl-2">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-headline-md text-lg text-on-surface mb-2">Akşam (17:00+)</h4>
+<span id="evening-degree" class="text-sm font-semibold text-primary">
+20°C
+</span>
+</div>
+<p id="evening-text"
+class="text-body-md text-on-surface-variant leading-relaxed mt-1"><strong class="text-on-surface">Hafif Sweatshirt:</strong> Akşam yürüyüşü için rahat bir seçim.</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Ek Detaylar Section -->
+<section class="mt-12">
+
+<h3 class="font-headline-md text-headline-md mb-8">
+Kombin Önerileri
+</h3>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+<!-- ÜST GİYİM -->
+<div class="glass-card rounded-[36px] p-8 min-h-[220px]
+bg-white/55 backdrop-blur-xl
+border border-white/80
+shadow-[0_12px_40px_rgba(15,23,42,0.06)]
+hover:scale-[1.02]
+hover:shadow-2xl
+hover:-translate-y-1
+transition-all duration-500
+relative overflow-hidden">
+
+<div class="absolute -top-10 -right-10 w-32 h-32
+bg-blue-200/20 rounded-full blur-3xl"></div>
+
+<div class="mb-5 relative z-10">
+<span class="px-3 py-1 rounded-full bg-blue-100/70 text-primary
+text-[10px] font-black tracking-[0.18em] uppercase">
+AI ÖNERİSİ
+</span>
+</div>
+
+<div class="flex items-center gap-5 mb-6 relative z-10">
+
+<div class="w-16 h-16 rounded-2xl
+bg-gradient-to-br from-blue-100 to-blue-200
+flex items-center justify-center text-blue-600 shadow-inner">
+
+<span class="material-symbols-outlined text-4xl">
+checkroom
+</span>
+
+</div>
+
+<div class="pl-2">
+
+<h4 class="font-bold text-xl">
+Üst Giyim
+</h4>
+
+<p class="text-sm opacity-60 mt-1">
+Günün hava durumuna göre
+</p>
+
+</div>
+
+</div>
+
+<p id="topwear-text"
+class="text-on-surface-variant leading-7 mt-5 text-[15px] relative z-10">
+
+İnce sweatshirt önerilir.
+
+</p>
+
+</div>
+
+
+
+<!-- AYAKKABI -->
+<div class="glass-card rounded-[36px] p-8 min-h-[220px]
+bg-white/55 backdrop-blur-xl
+border border-white/80
+shadow-[0_12px_40px_rgba(15,23,42,0.06)]
+hover:scale-[1.02]
+hover:shadow-2xl
+hover:-translate-y-1
+transition-all duration-500
+relative overflow-hidden">
+
+<div class="absolute -top-10 -right-10 w-32 h-32
+bg-slate-200/20 rounded-full blur-3xl"></div>
+
+<div class="mb-5 relative z-10">
+<span class="px-3 py-1 rounded-full bg-slate-100/80 text-slate-700
+text-[10px] font-black tracking-[0.18em] uppercase">
+AI ÖNERİSİ
+</span>
+</div>
+
+<div class="flex items-center gap-5 mb-6 relative z-10">
+
+<div class="w-16 h-16 rounded-2xl
+bg-gradient-to-br from-slate-100 to-slate-200
+flex items-center justify-center text-slate-700 shadow-inner">
+
+<span class="material-symbols-outlined text-4xl">
+steps
+</span>
+
+</div>
+
+<div class="pl-2">
+
+<h4 class="font-bold text-xl">
+Ayakkabı
+</h4>
+
+<p class="text-sm opacity-60 mt-1">
+Dış ortam koşulları
+</p>
+
+</div>
+
+</div>
+
+<p id="shoe-text"
+class="text-on-surface-variant leading-7 mt-5 text-[15px] relative z-10">
+
+Sneaker veya rahat yürüyüş ayakkabısı önerilir.
+
+</p>
+
+</div>
+
+
+
+<!-- AKSESUAR -->
+<div class="glass-card rounded-[36px] p-8 min-h-[220px]
+bg-white/55 backdrop-blur-xl
+border border-white/80
+shadow-[0_12px_40px_rgba(15,23,42,0.06)]
+hover:scale-[1.02]
+hover:shadow-2xl
+hover:-translate-y-1
+transition-all duration-500
+relative overflow-hidden">
+
+<div class="absolute -top-10 -right-10 w-32 h-32
+bg-yellow-200/20 rounded-full blur-3xl"></div>
+
+<div class="mb-5 relative z-10">
+<span class="px-3 py-1 rounded-full bg-yellow-100/80 text-yellow-700
+text-[10px] font-black tracking-[0.18em] uppercase">
+AI ÖNERİSİ
+</span>
+</div>
+
+<div class="flex items-center gap-5 mb-6 relative z-10">
+
+<div class="w-16 h-16 rounded-2xl
+bg-gradient-to-br from-yellow-100 to-amber-200
+flex items-center justify-center text-yellow-700 shadow-inner">
+
+<span class="material-symbols-outlined text-4xl">
+styler
+</span>
+
+</div>
+
+<div class="pl-2">
+
+<h4 class="font-bold text-xl">
+Aksesuar
+</h4>
+
+<p class="text-sm opacity-60 mt-1">
+Ek öneriler
+</p>
+
+</div>
+
+</div>
+
+<p id="accessory-text"
+class="text-on-surface-variant leading-7 mt-5 text-[15px] relative z-10">
+
+Güneş gözlüğü önerilir.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+<section class="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+<!-- BUGÜN YANINA AL -->
+<div class="glass-card rounded-[40px] p-8
+bg-white/50 backdrop-blur-xl
+border border-white/80
+shadow-[0_12px_40px_rgba(15,23,42,0.06)]">
+
+<div class="flex items-center justify-between mb-8">
+
+<div>
+
+<h3 class="text-2xl font-bold">
+Bugün Yanına Al
+</h3>
+
+<p class="opacity-60 text-sm">
+Hava durumuna göre öneriler
+</p>
+
+</div>
+
+<div class="w-14 h-14 rounded-2xl
+bg-gradient-to-br from-blue-500 to-indigo-600
+flex items-center justify-center text-white shadow-xl">
+
+<span class="material-symbols-outlined text-3xl">
+backpack
+</span>
+
+</div>
+
+</div>
+
+<div id="carry-items" class="flex flex-wrap gap-4">
+
+<div class="px-5 py-3 rounded-2xl bg-white/70 border border-white/60
+font-semibold shadow-sm">
+🕶️ Güneş Gözlüğü
+</div>
+
+<div class="px-5 py-3 rounded-2xl bg-white/70 border border-white/60
+font-semibold shadow-sm hover:scale-105 transition-all duration-300">
+💧 Su Şişesi
+</div>
+
+<div class="px-5 py-3 rounded-2xl bg-white/70 border border-white/60
+font-semibold shadow-sm hover:scale-105 transition-all duration-300">
+🧴 Güneş Kremi
+</div>
+
+<div class="px-5 py-3 rounded-2xl bg-white/70 border border-white/60
+font-semibold shadow-sm hover:scale-105 transition-all duration-300">
+🧢 Şapka
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- GÜNÜN RENKLERİ -->
+<div class="glass-card rounded-[40px] p-8
+bg-white/50 backdrop-blur-xl
+border border-white/80
+shadow-[0_12px_40px_rgba(15,23,42,0.06)]">
+
+<div class="flex items-center justify-between mb-8">
+
+<div>
+
+<h3 class="text-2xl font-bold">
+Günün Renkleri
+</h3>
+
+<p class="opacity-60 text-sm">
+Bugünkü hava tonları
+</p>
+
+</div>
+
+<div class="w-14 h-14 rounded-2xl
+bg-gradient-to-br from-pink-500 to-orange-400
+flex items-center justify-center text-white shadow-xl">
+
+<span class="material-symbols-outlined text-3xl">
+palette
+</span>
+
+</div>
+
+</div>
+
+<div class="flex items-center gap-5">
+
+<div id="color-1" class="w-20 h-20 rounded-3xl bg-[#E9E2D8]
+shadow-lg hover:scale-110 transition-all duration-300">
+</div>
+
+<div id="color-2" class="w-20 h-20 rounded-3xl bg-[#B7D0E8]
+shadow-lg hover:scale-110 transition-all duration-300">
+</div>
+
+<div id="color-3" class="w-20 h-20 rounded-3xl bg-[#FFFFFF]
+shadow-lg hover:scale-110 transition-all duration-300 border border-gray-200">
+</div>
+
+<div id="color-4" class="w-20 h-20 rounded-3xl bg-[#2B2B2B]
+shadow-lg hover:scale-110 transition-all duration-300">
+</div>
+
+</div>
+
+<div id="palette-text"
+class="mt-8 text-on-surface-variant leading-relaxed">
+
+Bugün açık tonlar, beyaz ve soft mavi kombinler hava ile mükemmel uyum sağlar.
+
+</div>
+
+</div>
+
+</section>
+</main>
+</section>
+
+<!--GÜNLÜK PLANLAYICI SAYFASI -->
+<section id="planner-section" class="page-section">
+    <main class="pt-32 pb-16 px-8 max-w-[1440px] mx-auto">
+<!-- Page Header -->
+<div class="mb-section-margin">
+<h1 class="font-display text-display text-on-background mb-2">Akıllı Gün Planlayıcı</h1>
+<p class="font-body-lg text-body-lg text-tertiary-container max-w-2xl">Gökyüzünün ritmine göre tasarlanmış, atmosferik verilerle optimize edilen günlük akışınız.</p>
+</div>
+<div class="grid grid-cols-12 gap-gutter">
+<!-- LEFT COLUMN: Timeline -->
+<section class="col-span-12 lg:col-span-7 flex flex-col gap-unit">
+<div class="glass-card rounded-2xl p-gutter">
+<div class="flex justify-between items-end mb-8">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-background">Zaman Çizelgesi</h2>
+<p id="wear-date" class="text-slate-500 text-sm">Bugün, 24 Mayıs</p>
+</div>
+<div class="flex gap-2">
+<span class="px-3 py-1 bg-surface-container rounded-full text-xs font-bold text-primary tracking-wider uppercase">Canlı</span>
+</div>
+</div>
+<div id="planner-timeline"
+class="relative space-y-0">
+</div>
+<!-- Hour Blocks -->
+</section>
+<!-- RIGHT COLUMN: Suggestions & Cards -->
+<section class="col-span-12 lg:col-span-5 flex flex-col gap-gutter">
+<!-- ACTIVITY SUGGESTIONS -->
+<div class="col-span-12 lg:col-span-5 flex flex-col gap-5">
+
+    <!-- AI PANEL -->
+    <div class="relative overflow-hidden rounded-[32px]
+    bg-gradient-to-br from-blue-600 via-indigo-600 to-blue-500
+    p-7 text-white shadow-2xl">
+
+        <!-- glow -->
+        <div class="absolute -top-20 -right-20 w-60 h-60
+        bg-white/10 rounded-full blur-3xl">
+        </div>
+
+        <div class="relative z-10">
+
+            <div class="flex items-center gap-4 mb-6">
+
+                <div class="w-16 h-16 rounded-3xl
+                bg-white/15 backdrop-blur-xl
+                flex items-center justify-center">
+
+                    <span class="material-symbols-outlined text-4xl">
+                        auto_awesome
+                    </span>
+
+                </div>
+
+                <div>
+
+                    <h2 class="text-3xl font-black">
+                        SkyCode AI
+                    </h2>
+
+                    <p class="text-blue-100 text-sm">
+                        Günlük kişisel hava analizi
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- AI MESSAGE -->
+            <div id="planner-ai-message"
+            class="text-lg font-semibold leading-relaxed
+            text-blue-50 mb-6">
+
+                Bugün senin için oldukça iyi görünüyor.
+            </div>
+
+            <!-- SCORE -->
+            <div class="mb-6">
+
+                <div class="flex justify-between mb-2">
+
+                    <span class="font-bold">
+                        Gün Skoru
+                    </span>
+
+                    <span id="planner-score">
+                        92/100
+                    </span>
+
+                </div>
+
+                <div class="h-3 rounded-full bg-white/20 overflow-hidden">
+
+                    <div id="planner-score-bar"
+                    class="h-full rounded-full bg-white"
+                    style="width:92%">
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- TAGS -->
+            <div id="planner-tags"
+            class="flex flex-wrap gap-2">
+
+                <div class="px-4 py-2 rounded-full bg-white/10 text-sm">
+                    Enerjik
+                </div>
+
+            </div>
+
+
+
+<div id="planner-ai-tips"
+class="mt-6 flex flex-col gap-3">
+
+</div>
+</div>
+</div>
+    </div>
+
+    
+
+<!-- kişisel öneriler -->
+
+<!-- INFO CARDS -->
+<div class="grid grid-cols-2 gap-4">
+
+</div>
+
+</section>
+</div>
+</main>
+</section>
+
+<!-- Footer -->
+<footer class="w-full bg-white/30 backdrop-blur-[40px] border-t border-white/30 py-20 mt-32">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center px-10 gap-10">
+<div class="space-y-4 text-center md:text-left">
+<div class="text-2xl font-extrabold bg-gradient-to-r from-slate-700 to-slate-500 bg-clip-text text-transparent tracking-tighter">SkyCode • Akıllı Hava Durumu</div>
+<p class="font-manrope text-[10px] text-slate-400 font-bold tracking-[0.25em] uppercase">© 2024 Akıllı Hava Durumu • Premium Forecast</p>
+</div>
+<div class="flex flex-wrap justify-center gap-12">
+<a class="font-manrope text-xs font-bold text-slate-400 hover:text-primary transition-all uppercase tracking-widest" href="#">Privacy Policy</a>
+<a class="font-manrope text-xs font-bold text-slate-400 hover:text-primary transition-all uppercase tracking-widest" href="#">Terms</a>
+<a class="font-manrope text-xs font-bold text-slate-400 hover:text-primary transition-all uppercase tracking-widest" href="#">API Status</a>
+<a class="font-manrope text-xs font-bold text-slate-400 hover:text-primary transition-all uppercase tracking-widest" href="#">Help</a>
+</div>
+</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
