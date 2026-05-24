@@ -1,0 +1,4 @@
+# frontend dosyalarını dil grafiğinden gizle
+assets/css/* linguist-vendored
+assets/js/* linguist-vendored
+index.html linguist-vendored
