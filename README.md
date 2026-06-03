@@ -70,7 +70,7 @@ python main.py
 
 ```powershell
 pip install pyinstaller
-pyinstaller --noconfirm --windowed --name SkyCode --add-data "index.html;." --add-data "assets;assets" main.py
+pyinstaller --noconfirm --windowed --name SkyCode --add-data "index.html;." --add-data "assets;assets" launcher.py
 ```
 
 Çıktı `dist/SkyCode/SkyCode.exe` altında oluşur. API anahtarını exe içine koymayın; çalıştırmadan önce `SkyCode.exe` ile aynı klasöre `.env` dosyası ekleyin.

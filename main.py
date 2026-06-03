@@ -1,6 +1,7 @@
 import json
 import os
 import sys
+import traceback
 from collections import OrderedDict
 from datetime import datetime
 from pathlib import Path
@@ -14,6 +15,7 @@ from PyQt5.QtWidgets import QApplication, QMessageBox
 
 APP_DIR = Path(sys.executable).resolve().parent if getattr(sys, "frozen", False) else Path(__file__).resolve().parent
 RESOURCE_DIR = Path(getattr(sys, "_MEIPASS", APP_DIR))
+ERROR_LOG = APP_DIR / "skycode_error.log"
 DEFAULT_CITY = "Istanbul"
 OPENWEATHER_BASE_URL = "https://api.openweathermap.org/data"
 REQUEST_TIMEOUT = 12
@@ -395,7 +397,12 @@ def get_api_key():
     return api_key
 
 
+def write_error_log(message):
+    ERROR_LOG.write_text(message, encoding="utf-8")
+
+
 def show_startup_error(message):
+    write_error_log(message)
     QMessageBox.critical(None, "SkyCode Başlatılamadı", message)
 
 
@@ -422,7 +429,12 @@ def main():
         view.showMaximized()
         return app.exec_()
     except Exception as exc:
-        show_startup_error(f"Uygulama başlatılırken hata oluştu:\n{exc}")
+        show_startup_error(
+            "Uygulama başlatılırken hata oluştu:\n"
+            f"{exc}\n\n"
+            "Detay:\n"
+            f"{traceback.format_exc()}"
+        )
         return 1
 
 
