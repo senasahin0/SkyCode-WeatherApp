@@ -65,3 +65,12 @@ python main.py
 - `.env` dosyası commitlenmez; API anahtarını yalnızca yerel ortamda tutun.
 - Daha önce bir API anahtarı herkese açık bir yere yüklendiyse OpenWeather panelinden yenilemeniz önerilir.
 - `index.html` doğrudan tarayıcıda açıldığında statik önizleme olarak görünür; canlı hava durumu verileri için uygulamayı `python main.py` ile PyQt üzerinden çalıştırın.
+
+## Windows EXE Oluşturma
+
+```powershell
+pip install pyinstaller
+pyinstaller --noconfirm --windowed --name SkyCode --add-data "index.html;." --add-data "assets;assets" main.py
+```
+
+Çıktı `dist/SkyCode/SkyCode.exe` altında oluşur. API anahtarını exe içine koymayın; çalıştırmadan önce `SkyCode.exe` ile aynı klasöre `.env` dosyası ekleyin.

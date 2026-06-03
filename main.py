@@ -12,7 +12,8 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtWidgets import QApplication
 
 
-BASE_DIR = Path(__file__).resolve().parent
+APP_DIR = Path(sys.executable).resolve().parent if getattr(sys, "frozen", False) else Path(__file__).resolve().parent
+RESOURCE_DIR = Path(getattr(sys, "_MEIPASS", APP_DIR))
 DEFAULT_CITY = "Istanbul"
 OPENWEATHER_BASE_URL = "https://api.openweathermap.org/data"
 REQUEST_TIMEOUT = 12
@@ -262,7 +263,7 @@ def average_rain_chance(hourly_data):
 
 
 def load_local_env():
-    env_path = BASE_DIR / ".env"
+    env_path = APP_DIR / ".env"
     if not env_path.exists():
         return
 
@@ -405,7 +406,7 @@ def main():
 
     app = QApplication(sys.argv)
     view = QWebEngineView()
-    view.load(QUrl.fromLocalFile(str(BASE_DIR / "index.html")))
+    view.load(QUrl.fromLocalFile(str(RESOURCE_DIR / "index.html")))
 
     channel = QWebChannel()
     bridge = Bridge(view, weather_client)
