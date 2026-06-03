@@ -9,7 +9,7 @@ import requests
 from PyQt5.QtCore import QObject, QUrl, pyqtSlot
 from PyQt5.QtWebChannel import QWebChannel
 from PyQt5.QtWebEngineWidgets import QWebEngineView
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QMessageBox
 
 
 APP_DIR = Path(sys.executable).resolve().parent if getattr(sys, "frozen", False) else Path(__file__).resolve().parent
@@ -395,27 +395,35 @@ def get_api_key():
     return api_key
 
 
+def show_startup_error(message):
+    QMessageBox.critical(None, "SkyCode Başlatılamadı", message)
+
+
 def main():
     load_local_env()
+    app = QApplication(sys.argv)
 
     try:
         weather_client = OpenWeatherClient(get_api_key())
     except RuntimeError as exc:
-        print(exc)
+        show_startup_error(str(exc))
         return 1
 
-    app = QApplication(sys.argv)
-    view = QWebEngineView()
-    view.load(QUrl.fromLocalFile(str(RESOURCE_DIR / "index.html")))
+    try:
+        view = QWebEngineView()
+        view.load(QUrl.fromLocalFile(str(RESOURCE_DIR / "index.html")))
 
-    channel = QWebChannel()
-    bridge = Bridge(view, weather_client)
-    channel.registerObject("pybridge", bridge)
-    view.page().setWebChannel(channel)
+        channel = QWebChannel()
+        bridge = Bridge(view, weather_client)
+        channel.registerObject("pybridge", bridge)
+        view.page().setWebChannel(channel)
 
-    view.setWindowTitle("SkyCode")
-    view.showMaximized()
-    return app.exec_()
+        view.setWindowTitle("SkyCode")
+        view.showMaximized()
+        return app.exec_()
+    except Exception as exc:
+        show_startup_error(f"Uygulama başlatılırken hata oluştu:\n{exc}")
+        return 1
 
 
 if __name__ == "__main__":
