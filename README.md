@@ -14,7 +14,7 @@ SkyCode, OpenWeather verilerini kullanan PyQt5 tabanlı bir masaüstü hava duru
 
 ### Ana Sayfa - Hava Durumu Tahmini
 
-![Ana Sayfa](screenshots/home.png)
+![Ana Sayfa](Screenshots/home.png)
 
 Kullanıcılar şehir aratarak anlık hava durumu bilgilerine, saatlik tahminlere ve temel meteorolojik verilere erişebilir.
 
@@ -22,7 +22,7 @@ Kullanıcılar şehir aratarak anlık hava durumu bilgilerine, saatlik tahminler
 
 ### Hava Durumu Analizi
 
-![Analiz](screenshots/analysis.png)
+![Analiz](Screenshots/analysis.png)
 
 Son 24 saatlik sıcaklık değişimi, nem oranı, rüzgar hızı ve diğer meteorolojik verilerin görsel analiz ekranı.
 
@@ -30,7 +30,7 @@ Son 24 saatlik sıcaklık değişimi, nem oranı, rüzgar hızı ve diğer meteo
 
 ### Ne Giymeliyim?
 
-![Kıyafet Önerileri](screenshots/outfit.png)
+![Kıyafet Önerileri](Screenshots/outfit.png)
 
 Hava koşullarına göre yapay zeka destekli kıyafet ve aksesuar önerileri sunar.
 
@@ -38,7 +38,7 @@ Hava koşullarına göre yapay zeka destekli kıyafet ve aksesuar önerileri sun
 
 ### Kombin ve Günün Renkleri
 
-![Kombin Önerileri](screenshots/outfit-details.png)
+![Kombin Önerileri](Screenshots/outfit-details.png)
 
 Kombin önerileri, günlük aksesuar tavsiyeleri ve hava durumuna uygun renk paletleri.
 
@@ -46,7 +46,7 @@ Kombin önerileri, günlük aksesuar tavsiyeleri ve hava durumuna uygun renk pal
 
 ### Akıllı Gün Planlayıcı
 
-![Gün Planlayıcı](screenshots/planner.png)
+![Gün Planlayıcı](Screenshots/planner.png)
 
 Hava durumuna göre optimize edilmiş günlük zaman çizelgesi ve kişisel öneriler.
 
@@ -54,7 +54,7 @@ Hava durumuna göre optimize edilmiş günlük zaman çizelgesi ve kişisel öne
 
 ### Kullanıcı Profili Oluşturma
 
-![Profil Oluşturma](screenshots/profile-setup.png)
+![Profil Oluşturma](Screenshots/profile-setup.png)
 
 Kullanıcının stil tercihleri, günlük rutinleri ve kişisel özelliklerine göre özelleştirme ekranı.
 
@@ -62,7 +62,7 @@ Kullanıcının stil tercihleri, günlük rutinleri ve kişisel özelliklerine g
 
 ### Profil Yönetimi
 
-![Profil](screenshots/profile.png)
+![Profil](Screenshots/profile.png)
 
 Kullanıcı bilgileri, favori şehirler, tema ayarları ve kişisel hava profili yönetimi.
 
